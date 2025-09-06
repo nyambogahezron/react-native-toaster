@@ -1,4 +1,3 @@
-// Main exports for the toast package
 export { default as ToastContainer } from './components/ToastContainer';
 export { default as ToastDemo } from './components/ToastDemo';
 export { useToastStore } from './store/toastStore';

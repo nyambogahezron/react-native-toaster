@@ -1,9 +1,0 @@
-[install]
-# Configure package manager settings for example app
-cache = true
-exact = false
-production = false
-
-[install.lockfile]
-save = true
-print = "yarn"

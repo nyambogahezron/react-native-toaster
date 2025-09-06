@@ -16,11 +16,11 @@ A beautiful, animated toast notification system for React Native with gesture su
 ## Installation
 
 ````bash
-bun add @nyambogahezron/react-toaster
+bun add @NH/react-toaster
 # or
-npm install @nyambogahezron/react-toaster
+npm install @NH/react-toaster
 # or
-yarn add @nyambogahezron/react-toaster
+yarn add @NH/react-toaster
 ```### Peer Dependencies
 
 Make sure you have these dependencies installed:
@@ -50,7 +50,7 @@ export default function App() {
 ### 2. Add ToastContainer to your app
 
 ```tsx
-import { ToastContainer } from '@nyambogahezron/react-toaster';
+import { ToastContainer } from '@NH/react-toaster';
 
 export default function App() {
 	return (
@@ -67,7 +67,7 @@ export default function App() {
 ```tsx
 import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
-import { useToast, ToastContainer } from '@nyambogahezron/react-toaster';
+import { useToast, ToastContainer } from '@NH/react-toaster';
 
 function MyComponent() {
 	const toast = useToast();
@@ -197,7 +197,7 @@ toast.custom({
 For advanced use cases, you can access the store directly:
 
 ```tsx
-import { useToastStore } from '@nyambogahezron/react-toaster';
+import { useToastStore } from '@NH/react-toaster';
 
 const { toasts, showToast, hideToast, clearAllToasts } = useToastStore();
 ```
@@ -206,11 +206,57 @@ const { toasts, showToast, hideToast, clearAllToasts } = useToastStore();
 
 Check out the example app in the `/example` folder to see all features in action.
 
-````bash
+```bash
 cd example
 bun install
 bun run start
-```## Contributing
+```
+
+## Local Development
+
+To develop and test the package locally:
+
+### Option 1: Using bun link (Recommended)
+
+```bash
+# In the main package directory
+bun link
+
+# In your test project
+bun link @NH/react-toaster
+```
+
+### Option 2: Using the example app
+
+```bash
+# Clone and setup
+git clone <repository-url>
+cd react-toaster
+
+# Install dependencies
+bun install
+
+# Link the package and setup example
+bun run link:local
+bun run setup:example
+
+# Start development
+bun run example
+```
+
+### Testing Changes
+
+After making changes to the package:
+
+```bash
+# Rebuild if needed
+bun run build
+
+# The linked package will automatically reflect changes
+# Just reload your app to see updates
+```
+
+## Contributing
 
 Contributions are welcome! Please read our contributing guidelines and submit pull requests to our repository.
 
@@ -224,7 +270,7 @@ MIT
 
 ```bash
 bun install
-````
+```
 
 To run:
 

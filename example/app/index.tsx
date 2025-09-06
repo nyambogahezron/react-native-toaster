@@ -6,7 +6,7 @@ import {
 	StyleSheet,
 	SafeAreaView,
 } from 'react-native';
-import { ToastContainer, useToast } from '../..';
+import { ToastContainer, useToast } from '@nh/react-toaster';
 
 function ToastExample() {
 	const toast = useToast();

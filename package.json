@@ -1,15 +1,13 @@
 {
-	"name": "@nyambogahezron/react-toaster",
+	"name": "@nh/react-toaster",
 	"version": "1.0.0",
 	"description": "A beautiful, animated toast notification system for React Native",
-	"main": "index.ts",
-	"module": "index.ts",
-	"type": "module",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"react-native": "./dist/index.js",
 	"files": [
-		"index.ts",
-		"components/",
-		"hooks/",
-		"store/",
+		"dist/",
 		"README.md",
 		"CHANGELOG.md"
 	],
@@ -20,7 +18,9 @@
 		"lint": "bun run eslint . --ext .ts,.tsx",
 		"lint:fix": "bun run eslint . --ext .ts,.tsx --fix",
 		"prepublishOnly": "bun run build",
-		"example": "cd example && bun run start"
+		"example": "cd example && bun run start",
+		"link:local": "bun link",
+		"setup:example": "cd example && bun link @NH/react-toaster && bun install"
 	},
 	"keywords": [
 		"react-native",
@@ -55,5 +55,13 @@
 		"@typescript-eslint/parser": "^8.39.1",
 		"eslint": "^8.0.0",
 		"typescript": "^5.0.0"
+	},
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"require": "./dist/index.js",
+			"react-native": "./dist/index.js"
+		}
 	}
 }

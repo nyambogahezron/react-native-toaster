@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"target": "es2017",
+		"target": "esnext",
 		"module": "esnext",
 		"lib": ["dom", "esnext"],
 		"allowJs": true,
@@ -16,7 +16,8 @@
 		"declaration": true,
 		"outDir": "./dist",
 		"jsx": "react-native",
-		"verbatimModuleSyntax": false
+		"verbatimModuleSyntax": false,
+		"ignoreDeprecations": "6.0"
 	},
 	"include": ["index.ts", "components/**/*", "hooks/**/*", "store/**/*"],
 	"exclude": ["node_modules", "dist", "example"]

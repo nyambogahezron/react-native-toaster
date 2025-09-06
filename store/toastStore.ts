@@ -26,7 +26,7 @@ export const useToastStore = create<ToastState>((set, get) => ({
 		const id = Math.random().toString(36).substr(2, 9);
 		const newToast: Toast = {
 			id,
-			duration: 4000, // Default 4 seconds
+			duration: 4000,
 			...toast,
 		};
 
@@ -34,7 +34,6 @@ export const useToastStore = create<ToastState>((set, get) => ({
 			toasts: [...state.toasts, newToast],
 		}));
 
-		// Auto-hide toast after duration
 		if (newToast.duration && newToast.duration > 0) {
 			setTimeout(() => {
 				get().hideToast(id);
@@ -53,7 +52,6 @@ export const useToastStore = create<ToastState>((set, get) => ({
 	},
 }));
 
-// Helper functions for easier usage
 export const showSuccessToast = (message: string, title?: string) => {
 	useToastStore.getState().showToast({
 		type: 'success',
