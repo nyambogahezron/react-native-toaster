@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
 	View,
 	Text,
@@ -12,9 +12,9 @@ import Animated, {
 	useAnimatedStyle,
 	withSpring,
 	withTiming,
-	runOnJS,
 	interpolate,
 	Extrapolation,
+	runOnJS,
 } from 'react-native-reanimated';
 import {
 	Gesture,
@@ -36,46 +36,114 @@ interface ToastItemProps {
 
 function ToastItem({ toast, index }: ToastItemProps) {
 	const insets = useSafeAreaInsets();
-	const { hideToast } = useToastStore();
+	const { hideToast, globalConfig } = useToastStore();
 
-	const translateY = useSharedValue(-100);
+	const config = { ...globalConfig, ...toast.config };
+	const position = config.position || 'top';
+	const entryAnimation = config.animationConfig?.entry || {
+		duration: 300,
+		damping: 15,
+		stiffness: 150,
+		type: 'spring',
+	};
+	const exitAnimation = config.animationConfig?.exit || {
+		duration: 250,
+		type: 'timing',
+	};
+
+	const translateY = useSharedValue(position === 'bottom' ? 100 : -100);
 	const translateX = useSharedValue(0);
 	const opacity = useSharedValue(0);
 	const scale = useSharedValue(0.9);
 
+	const getInitialPosition = useCallback(() => {
+		switch (position) {
+			case 'top':
+				return insets.top + 10 + index * (TOAST_HEIGHT + 8);
+			case 'bottom':
+				return -(insets.bottom + 10 + index * (TOAST_HEIGHT + 8));
+			case 'center':
+				return index * (TOAST_HEIGHT + 8);
+			default:
+				return insets.top + 10 + index * (TOAST_HEIGHT + 8);
+		}
+	}, [position, insets.top, insets.bottom, index]);
+
+	const hideToastWrapper = useCallback((id: string) => {
+		hideToast(id);
+	}, [hideToast]);
+
 	useEffect(() => {
-		// Entry animation
-		translateY.value = withSpring(
-			insets.top + 10 + index * (TOAST_HEIGHT + 8),
-			{
-				damping: 15,
-				stiffness: 150,
-			}
-		);
-		opacity.value = withTiming(1, { duration: 300 });
-		scale.value = withSpring(1, { damping: 15, stiffness: 150 });
-	}, [index, insets.top]);
+		const targetPosition = getInitialPosition();
 
-	const handleDismiss = () => {
-		// Exit animation
-		translateY.value = withTiming(-100, { duration: 250 });
-		opacity.value = withTiming(0, { duration: 250 });
-		scale.value = withTiming(0.9, { duration: 250 });
+		if (entryAnimation.type === 'spring') {
+			translateY.value = withSpring(targetPosition, {
+				damping: entryAnimation.damping || 15,
+				stiffness: entryAnimation.stiffness || 150,
+			});
+			scale.value = withSpring(1, {
+				damping: entryAnimation.damping || 15,
+				stiffness: entryAnimation.stiffness || 150,
+			});
+		} else {
+			translateY.value = withTiming(targetPosition, {
+				duration: entryAnimation.duration || 300,
+			});
+			scale.value = withTiming(1, {
+				duration: entryAnimation.duration || 300,
+			});
+		}
 
-		setTimeout(() => {
-			runOnJS(hideToast)(toast.id);
-		}, 250);
-	};
+		opacity.value = withTiming(1, { duration: entryAnimation.duration || 300 });
+	}, [index, insets.top, insets.bottom, position, entryAnimation, getInitialPosition]);
 
-	// Swipe gesture handler
+	const handleDismiss = useCallback(() => {
+		const exitPosition = position === 'bottom' ? 100 : -100;
+		const exitDuration = exitAnimation.duration || 250;
+
+		const animationFinishedCallback = () => {
+			'worklet';
+			runOnJS(hideToastWrapper)(toast.id);
+		};
+
+		if (exitAnimation.type === 'spring') {
+			translateY.value = withSpring(
+				exitPosition,
+				{
+					damping: exitAnimation.damping || 15,
+					stiffness: exitAnimation.stiffness || 150,
+				},
+				animationFinishedCallback
+			);
+			scale.value = withSpring(0.9, {
+				damping: exitAnimation.damping || 15,
+				stiffness: exitAnimation.stiffness || 150,
+			});
+		} else {
+			translateY.value = withTiming(
+				exitPosition,
+				{
+					duration: exitDuration,
+				},
+				animationFinishedCallback
+			);
+			scale.value = withTiming(0.9, {
+				duration: exitDuration,
+			});
+		}
+
+		opacity.value = withTiming(0, { duration: exitDuration });
+	}, [position, exitAnimation, toast.id, hideToastWrapper]);
+
 	const panGesture = Gesture.Pan()
+		.enabled(config.swipeEnabled !== false)
 		.onStart(() => {
-			// Store initial position
+			'worklet';
 		})
 		.onUpdate((event) => {
+			'worklet';
 			translateX.value = event.translationX;
 
-			// Reduce opacity as user swipes
 			const progress = Math.abs(event.translationX) / (SCREEN_WIDTH * 0.4);
 			opacity.value = interpolate(
 				progress,
@@ -85,29 +153,32 @@ function ToastItem({ toast, index }: ToastItemProps) {
 			);
 		})
 		.onEnd((event) => {
+			'worklet';
 			const shouldDismiss =
 				Math.abs(event.translationX) > SCREEN_WIDTH * 0.3 ||
 				Math.abs(event.velocityX) > 500;
 
 			if (shouldDismiss) {
-				// Swipe away animation
+				const swipeExitDuration = exitAnimation.duration || 200;
+				const swipeFinishedCallback = () => {
+					'worklet';
+					runOnJS(hideToastWrapper)(toast.id);
+				};
+
 				translateX.value = withTiming(
 					event.translationX > 0 ? SCREEN_WIDTH : -SCREEN_WIDTH,
-					{ duration: 200 }
+					{ duration: swipeExitDuration },
+					swipeFinishedCallback
 				);
-				opacity.value = withTiming(0, { duration: 200 });
-
-				setTimeout(() => {
-					runOnJS(hideToast)(toast.id);
-				}, 200);
+				opacity.value = withTiming(0, { duration: swipeExitDuration });
 			} else {
-				// Spring back
 				translateX.value = withSpring(0);
 				opacity.value = withSpring(1);
 			}
 		});
 
 	const animatedStyle = useAnimatedStyle(() => {
+		'worklet';
 		return {
 			transform: [
 				{ translateY: translateY.value },
@@ -116,7 +187,7 @@ function ToastItem({ toast, index }: ToastItemProps) {
 			],
 			opacity: opacity.value,
 		};
-	});
+	}, []);
 
 	const getToastColors = () => {
 		switch (toast.type) {
@@ -179,45 +250,62 @@ function ToastItem({ toast, index }: ToastItemProps) {
 						backgroundColor: colors.backgroundColor,
 						borderLeftColor: colors.borderColor,
 					},
+					config.customStyles?.container,
 					animatedStyle,
 				]}
 			>
-				<View style={styles.toastContent}>
+				<View style={[styles.toastContent, config.customStyles?.content]}>
 					<View style={styles.iconContainer}>
-						<Text style={[styles.icon, { color: colors.iconColor }]}>
+						<Text
+							style={[
+								styles.icon,
+								{ color: colors.iconColor },
+								config.customStyles?.icon,
+							]}
+						>
 							{getIcon()}
 						</Text>
 					</View>
 
 					<View style={styles.textContainer}>
 						{toast.title && (
-							<Text style={styles.title} numberOfLines={1}>
+							<Text
+								style={[styles.title, config.customStyles?.title]}
+								numberOfLines={1}
+							>
 								{toast.title}
 							</Text>
 						)}
-						<Text style={styles.message} numberOfLines={2}>
+						<Text
+							style={[styles.message, config.customStyles?.message]}
+							numberOfLines={2}
+						>
 							{toast.message}
 						</Text>
 					</View>
 
 					<TouchableOpacity
-						style={styles.closeButton}
+						style={[styles.closeButton, config.customStyles?.closeButton]}
 						onPress={handleDismiss}
 						hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 					>
-						<Text style={styles.closeText}>✕</Text>
+						<Text style={[styles.closeText, config.customStyles?.closeText]}>
+							✕
+						</Text>
 					</TouchableOpacity>
 				</View>
 
 				{toast.action && (
 					<TouchableOpacity
-						style={styles.actionButton}
+						style={[styles.actionButton, config.customStyles?.actionButton]}
 						onPress={() => {
 							toast.action?.onPress();
 							handleDismiss();
 						}}
 					>
-						<Text style={styles.actionText}>{toast.action.label}</Text>
+						<Text style={[styles.actionText, config.customStyles?.actionText]}>
+							{toast.action.label}
+						</Text>
 					</TouchableOpacity>
 				)}
 			</Animated.View>
@@ -226,14 +314,32 @@ function ToastItem({ toast, index }: ToastItemProps) {
 }
 
 const ToastContainer: React.FC = () => {
-	const { toasts } = useToastStore();
+	const { toasts, globalConfig } = useToastStore();
+	const position = globalConfig.position || 'top';
 
 	if (toasts.length === 0) {
 		return null;
 	}
 
+	const getContainerStyle = () => {
+		switch (position) {
+			case 'top':
+				return { ...styles.container, top: 0 };
+			case 'bottom':
+				return { ...styles.container, bottom: 0, top: undefined };
+			case 'center':
+				return {
+					...styles.container,
+					top: '50%' as const,
+					justifyContent: 'center' as const,
+				};
+			default:
+				return { ...styles.container, top: 0 };
+		}
+	};
+
 	return (
-		<GestureHandlerRootView style={styles.container}>
+		<GestureHandlerRootView style={getContainerStyle()}>
 			{toasts.map((toast, index) => (
 				<ToastItem key={toast.id} toast={toast} index={index} />
 			))}
@@ -301,7 +407,7 @@ const styles = StyleSheet.create({
 	title: {
 		fontSize: 16,
 		fontWeight: '600',
-		color: '#111827',
+		color: '#f3f3f3',
 		marginBottom: 2,
 	},
 	message: {

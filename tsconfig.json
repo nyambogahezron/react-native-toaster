@@ -9,15 +9,14 @@
 		"allowSyntheticDefaultImports": true,
 		"strict": true,
 		"forceConsistentCasingInFileNames": true,
-		"moduleResolution": "node",
+		"moduleResolution": "bundler",
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": false,
 		"declaration": true,
 		"outDir": "./dist",
 		"jsx": "react-native",
-		"verbatimModuleSyntax": false,
-		"ignoreDeprecations": "6.0"
+		"verbatimModuleSyntax": false
 	},
 	"include": ["index.ts", "components/**/*", "hooks/**/*", "store/**/*"],
 	"exclude": ["node_modules", "dist", "example"]

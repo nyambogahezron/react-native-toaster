@@ -15,11 +15,97 @@ const ToastDemo: React.FC = () => {
 	const formToast = useFormToast();
 	const [customMessage, setCustomMessage] = useState('');
 
+	const configureGlobalSettings = () => {
+		toast.configure({
+			position: 'bottom',
+			animationConfig: {
+				entry: {
+					duration: 500,
+					type: 'spring',
+					damping: 10,
+					stiffness: 100,
+				},
+				exit: {
+					duration: 300,
+					type: 'timing',
+				},
+			},
+		});
+		toast.success('Global configuration updated!', 'Settings');
+	};
+
+	const showCustomStyledToast = () => {
+		toast.success('Custom styled toast!', 'Beautiful', {
+			customStyles: {
+				container: {
+					backgroundColor: '#6366F1',
+					borderRadius: 20,
+					borderLeftWidth: 0,
+					shadowColor: '#6366F1',
+					shadowOpacity: 0.5,
+					shadowRadius: 15,
+				},
+				title: {
+					color: '#FFFFFF',
+					fontSize: 18,
+					fontWeight: 'bold',
+				},
+				message: {
+					color: '#E0E7FF',
+					fontSize: 16,
+				},
+				icon: {
+					fontSize: 20,
+				},
+			},
+		});
+	};
+
+	const showSlowAnimationToast = () => {
+		toast.info('Slow animation toast', 'Watch me!', {
+			animationConfig: {
+				entry: {
+					duration: 800,
+					type: 'spring',
+					damping: 8,
+					stiffness: 80,
+				},
+				exit: {
+					duration: 600,
+					type: 'timing',
+				},
+			},
+		});
+	};
+
+	const showCenterToast = () => {
+		toast.warning('I appear in the center!', 'Centered', {
+			position: 'center',
+			customStyles: {
+				container: {
+					marginHorizontal: 40,
+				},
+			},
+		});
+	};
+
+	const showNonSwipeableToast = () => {
+		toast.error('You cannot swipe me away!', 'Persistent', {
+			swipeEnabled: false,
+			autoHide: false,
+			customStyles: {
+				container: {
+					borderWidth: 2,
+					borderColor: '#EF4444',
+				},
+			},
+		});
+	};
+
 	const showAsyncExample = async () => {
 		toast.info('Starting async operation...', 'Loading');
 
 		try {
-			// Simulate API call
 			await new Promise((resolve, reject) => {
 				setTimeout(() => {
 					if (Math.random() > 0.5) {
@@ -51,7 +137,7 @@ const ToastDemo: React.FC = () => {
 			type: 'warning',
 			title: 'Unsaved Changes',
 			message: 'You have unsaved changes. Do you want to save them?',
-			duration: 0, // Don't auto-dismiss
+			duration: 0,
 			action: {
 				label: 'Save Now',
 				onPress: () => {
@@ -143,6 +229,45 @@ const ToastDemo: React.FC = () => {
 					onPress={showLongMessage}
 				>
 					<Text style={styles.buttonText}>Long Message Test</Text>
+				</TouchableOpacity>
+			</View>
+
+			<View style={styles.section}>
+				<Text style={styles.sectionTitle}>Custom Styling & Animation</Text>
+
+				<TouchableOpacity
+					style={[styles.button, styles.primaryButton]}
+					onPress={showCustomStyledToast}
+				>
+					<Text style={styles.buttonText}>Custom Styled Toast</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={[styles.button, styles.primaryButton]}
+					onPress={showSlowAnimationToast}
+				>
+					<Text style={styles.buttonText}>Slow Animation</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={[styles.button, styles.primaryButton]}
+					onPress={showCenterToast}
+				>
+					<Text style={styles.buttonText}>Center Position</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={[styles.button, styles.primaryButton]}
+					onPress={showNonSwipeableToast}
+				>
+					<Text style={styles.buttonText}>Non-Swipeable Toast</Text>
+				</TouchableOpacity>
+
+				<TouchableOpacity
+					style={[styles.button, styles.warningButton]}
+					onPress={configureGlobalSettings}
+				>
+					<Text style={styles.buttonText}>Configure Global Settings</Text>
 				</TouchableOpacity>
 			</View>
 

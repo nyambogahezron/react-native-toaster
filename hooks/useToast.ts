@@ -1,39 +1,44 @@
 import { useToastStore } from '../store/toastStore';
-import type { Toast } from '../store/toastStore';
+import type { Toast, ToastConfig } from '../store/toastStore';
 
 export const useToast = () => {
-	const { showToast, hideToast, clearAllToasts } = useToastStore();
+	const { showToast, hideToast, clearAllToasts, setGlobalConfig } =
+		useToastStore();
 
 	return {
-		success: (message: string, title?: string) => {
+		success: (message: string, title?: string, config?: ToastConfig) => {
 			showToast({
 				type: 'success',
 				message,
 				title,
+				config,
 			});
 		},
 
-		error: (message: string, title?: string) => {
+		error: (message: string, title?: string, config?: ToastConfig) => {
 			showToast({
 				type: 'error',
 				message,
 				title,
+				config,
 			});
 		},
 
-		warning: (message: string, title?: string) => {
+		warning: (message: string, title?: string, config?: ToastConfig) => {
 			showToast({
 				type: 'warning',
 				message,
 				title,
+				config,
 			});
 		},
 
-		info: (message: string, title?: string) => {
+		info: (message: string, title?: string, config?: ToastConfig) => {
 			showToast({
 				type: 'info',
 				message,
 				title,
+				config,
 			});
 		},
 
@@ -43,6 +48,7 @@ export const useToast = () => {
 
 		hide: hideToast,
 		clear: clearAllToasts,
+		configure: setGlobalConfig,
 	};
 };
 
@@ -51,19 +57,23 @@ export const useApiToast = () => {
 
 	return {
 		handleApiSuccess: (
-			message: string = 'Operation completed successfully'
+			message: string = 'Operation completed successfully',
+			config?: ToastConfig
 		) => {
-			toast.success(message, 'Success');
+			toast.success(message, 'Success', config);
 		},
 
-		handleApiError: (error: any) => {
+		handleApiError: (error: any, config?: ToastConfig) => {
 			const message =
 				error?.message || error?.data?.message || 'An error occurred';
-			toast.error(message, 'Error');
+			toast.error(message, 'Error', config);
 		},
 
-		handleApiLoading: (message: string = 'Loading...') => {
-			toast.info(message, 'Please wait');
+		handleApiLoading: (
+			message: string = 'Loading...',
+			config?: ToastConfig
+		) => {
+			toast.info(message, 'Please wait', config);
 		},
 	};
 };
@@ -72,16 +82,19 @@ export const useFormToast = () => {
 	const toast = useToast();
 
 	return {
-		validationError: (message: string) => {
-			toast.error(message, 'Validation Error');
+		validationError: (message: string, config?: ToastConfig) => {
+			toast.error(message, 'Validation Error', config);
 		},
 
-		saveSuccess: (message: string = 'Saved successfully') => {
-			toast.success(message, 'Success');
+		saveSuccess: (
+			message: string = 'Saved successfully',
+			config?: ToastConfig
+		) => {
+			toast.success(message, 'Success', config);
 		},
 
-		saveError: (message: string = 'Failed to save') => {
-			toast.error(message, 'Save Error');
+		saveError: (message: string = 'Failed to save', config?: ToastConfig) => {
+			toast.error(message, 'Save Error', config);
 		},
 	};
 };
