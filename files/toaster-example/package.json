@@ -10,8 +10,8 @@
 		"lint": "expo lint"
 	},
 	"dependencies": {
-		"@nh/react-toaster": "link:@nh/react-toaster",
 		"@expo/vector-icons": "^14.1.0",
+		"@nh/react-toaster": "link:@nh/react-toaster",
 		"@react-navigation/bottom-tabs": "^7.3.10",
 		"@react-navigation/elements": "^2.3.8",
 		"@react-navigation/native": "^7.1.6",
