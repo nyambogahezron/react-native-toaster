@@ -1,0 +1,31 @@
+{
+	"name": "toaster",
+	"description": "A react native toaster library with support for web",
+	"private": true,
+	"scripts": {
+		"build": "turbo build",
+		"dev": "turbo dev",
+		"start": "turbo start",
+		"test": "turbo test",
+		"test:watch": "turbo test:watch",
+		"lint": "turbo lint",
+		"lint:fix": "turbo lint:fix",
+		"check-types": "turbo check-types",
+		"clean": "turbo clean && rm -rf node_modules/.cache",
+		"example": "turbo start --filter=example",
+		"example:android": "cd apps/example && bun run android",
+		"example:ios": "cd apps/example && bun run ios",
+		"example:web": "cd apps/example && bun run web",
+		"package:dev": "turbo dev --filter=@nh/react-toaster",
+		"package:build": "turbo build --filter=@nh/react-toaster",
+		"package:test": "turbo test --filter=@nh/react-toaster"
+	},
+	"devDependencies": {
+		"turbo": "^2.5.6"
+	},
+	"packageManager": "bun@1.2.19",
+	"workspaces": [
+		"apps/*",
+		"packages/*"
+	]
+}
