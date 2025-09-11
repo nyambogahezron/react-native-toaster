@@ -7,7 +7,7 @@
     "check-types": "echo \"Types checked!\""
   },
   "dependencies": {
-    "pkg-a": "workspace:*",
-    "tooling-config": "workspace:*"
+    "pkg-a": "*",
+    "tooling-config": "*"
   }
 }
