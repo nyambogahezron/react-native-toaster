@@ -1,6 +1,6 @@
 {
 	"name": "hn-react-native-toaster",
-	"version": "1.0.0",
+	"version": "1.0.0-beta",
 	"description": "A beautiful, animated toast notification system for React Native",
 	"main": "./dist/index.js",
 	"module": "./dist/index.js",
@@ -20,10 +20,7 @@
 		"lint": "bun run eslint . --ext .ts,.tsx",
 		"lint:fix": "bun run eslint . --ext .ts,.tsx --fix",
 		"check-types": "bun run tsc --noEmit",
-		"clean": "rm -rf dist",
-		"prepublishOnly": "bun run build",
-		"example": "cd ../../apps/example && bun run start",
-		"link:local": "bun link"
+		"clean": "rm -rf dist"
 	},
 	"keywords": [
 		"react-native",
