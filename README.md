@@ -1,6 +1,6 @@
 # React Toaster
 
-[![npm version](https://badge.fury.io/js/@nh%2Freact-toaster.svg)](https://badge.fury.io/js/@nh%2Freact-toaster)
+[![npm version](https://badge.fury.io/js/hn-react-native-toaster.svg)](https://badge.fury.io/js/hn-react-native-toaster)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/%3C%2F%3E-TypeScript-%230074c1.svg)](http://www.typescriptlang.org/)
 [![React Native](https://img.shields.io/badge/React%20Native-0.70%2B-blue.svg)](https://reactnative.dev/)
@@ -9,7 +9,9 @@ A beautiful, animated toast notification system for React Native with gesture su
 
 ## Demo
 
-![React Toaster Demo](./apps/docs/assets/preview.gif)
+<p align="center">
+	<img src="./apps/docs/assets/preview.gif" alt="React Toaster Demo" width="300" height="700"/>
+</p>
 
 ## Features
 
@@ -30,11 +32,11 @@ A beautiful, animated toast notification system for React Native with gesture su
 ## Installation
 
 ````bash
-bun add @NH/react-toaster
+bun add hn-react-native-toaster
 # or
-npm install @NH/react-toaster
+npm install hn-react-native-toaster
 # or
-yarn add @NH/react-toaster
+yarn add hn-react-native-toaster
 ```### Peer Dependencies
 
 Make sure you have these dependencies installed:
@@ -64,7 +66,7 @@ export default function App() {
 ### 2. Add ToastContainer to your app
 
 ```tsx
-import { ToastContainer } from '@NH/react-toaster';
+import { ToastContainer } from 'hn-react-native-toaster';
 
 export default function App() {
 	return (
@@ -81,7 +83,7 @@ export default function App() {
 ```tsx
 import React from 'react';
 import { View, TouchableOpacity, Text } from 'react-native';
-import { useToast, ToastContainer } from '@NH/react-toaster';
+import { useToast, ToastContainer } from 'hn-react-native-toaster';
 
 function MyComponent() {
 	const toast = useToast();
@@ -419,7 +421,7 @@ toast.custom({
 For advanced use cases, you can access the store directly:
 
 ```tsx
-import { useToastStore } from '@NH/react-toaster';
+import { useToastStore } from 'hn-react-native-toaster';
 
 const { toasts, showToast, hideToast, clearAllToasts } = useToastStore();
 ```
@@ -445,7 +447,7 @@ To develop and test the package locally:
 bun link
 
 # In your test project
-bun link @NH/react-toaster
+bun link hn-react-native-toaster
 ```
 
 ### Option 2: Using the example app

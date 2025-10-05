@@ -38,6 +38,13 @@ function ToastItem({ toast, index }: ToastItemProps) {
 	const insets = useSafeAreaInsets();
 	const { hideToast, globalConfig } = useToastStore();
 
+	// Debug logging
+	console.log('ToastItem rendered:', {
+		id: toast.id,
+		hasAction: !!toast.action,
+		actionLabel: toast.action?.label,
+	});
+
 	const config = { ...globalConfig, ...toast.config };
 	const position = config.position || 'top';
 	const entryAnimation = config.animationConfig?.entry || {
@@ -146,7 +153,7 @@ function ToastItem({ toast, index }: ToastItemProps) {
 	}, [position, exitAnimation, toast.id, hideToastWrapper]);
 
 	const panGesture = Gesture.Pan()
-		.enabled(config.swipeEnabled !== false)
+		.enabled(config.swipeEnabled !== false && !toast.action) // Disable gesture when action exists
 		.onStart(() => {
 			'worklet';
 		})
@@ -252,74 +259,94 @@ function ToastItem({ toast, index }: ToastItemProps) {
 	};
 
 	return (
-		<GestureDetector gesture={panGesture}>
-			<Animated.View
-				style={[
-					styles.toastContainer,
-					{
-						backgroundColor: colors.backgroundColor,
-						borderLeftColor: colors.borderColor,
-					},
-					config.customStyles?.container,
-					animatedStyle,
-				]}
-			>
-				<View style={[styles.toastContent, config.customStyles?.content]}>
-					<View style={styles.iconContainer}>
-						<Text
-							style={[
-								styles.icon,
-								{ color: colors.iconColor },
-								config.customStyles?.icon,
-							]}
-						>
-							{getIcon()}
-						</Text>
-					</View>
-
-					<View style={styles.textContainer}>
-						{toast.title && (
+		<View>
+			<GestureDetector gesture={panGesture}>
+				<Animated.View
+					style={[
+						styles.toastContainer,
+						{
+							backgroundColor: colors.backgroundColor,
+							borderLeftColor: colors.borderColor,
+						},
+						config.customStyles?.container,
+						animatedStyle,
+					]}
+				>
+					<View style={[styles.toastContent, config.customStyles?.content]}>
+						<View style={styles.iconContainer}>
 							<Text
-								style={[styles.title, config.customStyles?.title]}
-								numberOfLines={1}
+								style={[
+									styles.icon,
+									{ color: colors.iconColor },
+									config.customStyles?.icon,
+								]}
 							>
-								{toast.title}
+								{getIcon()}
 							</Text>
-						)}
-						<Text
-							style={[styles.message, config.customStyles?.message]}
-							numberOfLines={2}
+						</View>
+
+						<View style={styles.textContainer}>
+							{toast.title && (
+								<Text
+									style={[styles.title, config.customStyles?.title]}
+									numberOfLines={1}
+								>
+									{toast.title}
+								</Text>
+							)}
+							<Text
+								style={[styles.message, config.customStyles?.message]}
+								numberOfLines={2}
+							>
+								{toast.message}
+							</Text>
+						</View>
+
+						<TouchableOpacity
+							style={[styles.closeButton, config.customStyles?.closeButton]}
+							onPress={handleDismiss}
+							hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 						>
-							{toast.message}
-						</Text>
+							<Text style={[styles.closeText, config.customStyles?.closeText]}>
+								✕
+							</Text>
+						</TouchableOpacity>
 					</View>
+				</Animated.View>
+			</GestureDetector>
 
-					<TouchableOpacity
-						style={[styles.closeButton, config.customStyles?.closeButton]}
-						onPress={handleDismiss}
-						hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-					>
-						<Text style={[styles.closeText, config.customStyles?.closeText]}>
-							✕
-						</Text>
-					</TouchableOpacity>
-				</View>
-
-				{toast.action && (
+			{toast.action && (
+				<Animated.View style={[animatedStyle, { top: TOAST_HEIGHT + 10 }]}>
 					<TouchableOpacity
 						style={[styles.actionButton, config.customStyles?.actionButton]}
 						onPress={() => {
-							toast.action?.onPress();
-							handleDismiss();
+							console.log('🔥 ACTION BUTTON PRESSED:', toast.action?.label);
+							console.log('🔥 Toast ID:', toast.id);
+
+							try {
+								// Execute the action first
+								toast.action?.onPress();
+								console.log('🔥 Action executed successfully');
+
+								// Delay dismissal to allow navigation/async operations to complete
+								setTimeout(() => {
+									console.log('🔥 Dismissing toast after action');
+									handleDismiss();
+								}, 100);
+							} catch (error) {
+								console.error('🔥 Error executing action:', error);
+								handleDismiss();
+							}
 						}}
+						hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 					>
 						<Text style={[styles.actionText, config.customStyles?.actionText]}>
 							{toast.action.label}
 						</Text>
 					</TouchableOpacity>
-				)}
-			</Animated.View>
-		</GestureDetector>
+				</Animated.View>
+			)}
+		</View>
 	);
 }
 
@@ -366,7 +393,7 @@ const styles = StyleSheet.create({
 		left: 0,
 		right: 0,
 		zIndex: 9999,
-		pointerEvents: 'box-none',
+		pointerEvents: 'auto',
 	},
 	toastContainer: {
 		paddingHorizontal: 0,
@@ -387,6 +414,7 @@ const styles = StyleSheet.create({
 		shadowOpacity: 0.3,
 		shadowRadius: 8,
 		elevation: 8,
+		zIndex: 9998,
 		...Platform.select({
 			ios: {
 				backgroundColor: 'rgba(255, 255, 255, 0.95)',
@@ -446,15 +474,18 @@ const styles = StyleSheet.create({
 		marginTop: 8,
 		marginHorizontal: 16,
 		marginBottom: 16,
-		paddingVertical: 8,
-		paddingHorizontal: 16,
-		backgroundColor: 'rgba(255, 255, 255, 0.2)',
+		paddingVertical: 12,
+		paddingHorizontal: 20,
+		backgroundColor: 'rgba(255, 255, 255, 0.9)',
 		borderRadius: 8,
 		alignItems: 'center',
+		zIndex: 10000,
+		elevation: 10,
+		position: 'relative',
 	},
 	actionText: {
 		fontSize: 14,
 		fontWeight: '600',
-		color: '#FFFFFF',
+		color: '#333333',
 	},
 });

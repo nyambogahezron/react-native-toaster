@@ -46,7 +46,7 @@ This security policy applies to:
 
 - The main React Toaster library
 - Official documentation and examples
-- The npm package `@nh/react-toaster`
+- The npm package `hn-react-native-toaster`
 
 ### Out of Scope
 

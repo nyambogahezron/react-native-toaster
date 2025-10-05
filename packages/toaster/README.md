@@ -1,6 +1,12 @@
-# @nh/react-toaster
+# hn-react-native-toaster
 
 A beautiful, animated toast notification system for React Native with support for Expo and web platforms.
+
+## Demo
+
+<p align="center">
+	<img src="./preview.gif" alt="React Toaster Demo" width="300" height="650"/>
+</p>
 
 ## Features
 
@@ -17,13 +23,16 @@ A beautiful, animated toast notification system for React Native with support fo
 
 ```bash
 # Using npm
-npm install @nh/react-toaster
+npm install hn-react-native-toaster
+
 
 # Using yarn
-yarn add @nh/react-toaster
+yarn add hn-react-native-toaster
+
 
 # Using bun
-bun add @nh/react-toaster
+bun add hn-react-native-toaster
+
 ```
 
 ### Peer Dependencies
@@ -45,7 +54,7 @@ Add the `ToastContainer` at the root of your app:
 ```tsx
 import React from 'react';
 import { View } from 'react-native';
-import { ToastContainer } from '@nh/react-toaster';
+import { ToastContainer } from 'hn-react-native-toaster';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
@@ -66,7 +75,7 @@ export default function App() {
 ```tsx
 import React from 'react';
 import { View, Button } from 'react-native';
-import { useToast } from '@nh/react-toaster';
+import { useToast } from 'hn-react-native-toaster';
 
 function MyComponent() {
 	const toast = useToast();
@@ -162,7 +171,7 @@ formToast.saveError('Failed to save form');
 The main container component that renders all toasts.
 
 ```tsx
-import { ToastContainer } from '@nh/react-toaster';
+import { ToastContainer } from 'hn-react-native-toaster';
 
 <ToastContainer />;
 ```
@@ -172,7 +181,7 @@ import { ToastContainer } from '@nh/react-toaster';
 A demo component showcasing all toast features.
 
 ```tsx
-import { ToastDemo } from '@nh/react-toaster';
+import { ToastDemo } from 'hn-react-native-toaster';
 
 <ToastDemo />;
 ```

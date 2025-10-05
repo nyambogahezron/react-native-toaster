@@ -15,7 +15,7 @@ This document provides comprehensive examples of how to use the new customizatio
 ### Setting Up Global Defaults
 
 ```tsx
-import { useToast } from '@NH/react-toaster';
+import { useToast } from 'hn-react-native-toaster';
 
 function App() {
 	const toast = useToast();

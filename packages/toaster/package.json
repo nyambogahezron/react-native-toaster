@@ -1,5 +1,5 @@
 {
-	"name": "@nh/react-toaster",
+	"name": "hn-react-native-toaster",
 	"version": "1.0.0",
 	"description": "A beautiful, animated toast notification system for React Native",
 	"main": "./dist/index.js",
@@ -37,7 +37,7 @@
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nyambogahezron/react-toaster.git"
+		"url": "git+https://github.com/nyambogahezron/react-toaster.git"
 	},
 	"dependencies": {
 		"zustand": "^4.5.0"
