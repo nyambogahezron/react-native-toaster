@@ -96,18 +96,6 @@ function MyComponent() {
 		toast.error('Something went wrong', 'Error');
 	};
 
-	const showCustom = () => {
-		toast.custom({
-			type: 'info',
-			message: 'Check out this new feature!',
-			title: 'New Feature',
-			action: {
-				label: 'Learn More',
-				onPress: () => console.log('Action pressed!'),
-			},
-		});
-	};
-
 	return (
 		<View>
 			<TouchableOpacity onPress={showSuccess}>
@@ -116,10 +104,6 @@ function MyComponent() {
 
 			<TouchableOpacity onPress={showError}>
 				<Text>Show Error Toast</Text>
-			</TouchableOpacity>
-
-			<TouchableOpacity onPress={showCustom}>
-				<Text>Show Custom Toast</Text>
 			</TouchableOpacity>
 
 			<ToastContainer />
@@ -140,18 +124,6 @@ toast.success(message, title?, duration?)
 toast.error(message, title?, duration?)
 toast.warning(message, title?, duration?)
 toast.info(message, title?, duration?)
-
-// Custom toast
-toast.custom({
-  type: 'success' | 'error' | 'warning' | 'info',
-  message: string,
-  title?: string,
-  duration?: number,
-  action?: {
-    label: string,
-    onPress: () => void,
-  },
-})
 
 // Control methods
 toast.hide(id)
@@ -336,19 +308,6 @@ toast.error(message, title?, config?)
 toast.warning(message, title?, config?)
 toast.info(message, title?, config?)
 
-// Custom toast
-toast.custom({
-  type: 'success' | 'error' | 'warning' | 'info',
-  message: string,
-  title?: string,
-  duration?: number,
-  action?: {
-    label: string,
-    onPress: () => void,
-  },
-  config?: ToastConfig, // New configuration options
-})
-
 // Control methods
 toast.hide(id)
 toast.clear()
@@ -397,26 +356,7 @@ interface ToastConfig {
 - **warning**: Orange toast for warnings
 - **info**: Blue toast for informational messages
 
-## Legacy Customization
-
-### Basic Toast Configuration
-
-```tsx
-toast.custom({
-	type: 'success',
-	message: 'Your custom message',
-	title: 'Custom Title',
-	duration: 5000, // 5 seconds (default: 4000)
-	action: {
-		label: 'Action Button',
-		onPress: () => {
-			// Custom action
-		},
-	},
-});
-```
-
-### Store Access
+## Store Access
 
 For advanced use cases, you can access the store directly:
 

@@ -36,7 +36,7 @@ interface ToastItemProps {
 
 function ToastItem({ toast, index }: ToastItemProps) {
 	const insets = useSafeAreaInsets();
-	const { hideToast, globalConfig } = useToastStore();
+	const { hideToast, globalConfig, executeAction } = useToastStore();
 
 	// Debug logging
 	console.log('ToastItem rendered:', {
@@ -201,7 +201,7 @@ function ToastItem({ toast, index }: ToastItemProps) {
 				{ translateY: translateY.value },
 				{ translateX: translateX.value },
 				{ scale: scale.value },
-			],
+			] as any,
 			opacity: opacity.value,
 		};
 	}, []);
@@ -320,24 +320,19 @@ function ToastItem({ toast, index }: ToastItemProps) {
 					<TouchableOpacity
 						style={[styles.actionButton, config.customStyles?.actionButton]}
 						onPress={() => {
-							console.log('🔥 ACTION BUTTON PRESSED:', toast.action?.label);
-							console.log('🔥 Toast ID:', toast.id);
+							console.log('ACTION BUTTON PRESSED:', toast.action?.label);
+							console.log('Toast ID:', toast.id);
 
-							try {
-								// Execute the action first
-								toast.action?.onPress();
-								console.log('🔥 Action executed successfully');
+							// Execute the action using the store's method
+							executeAction(toast.id);
 
-								// Delay dismissal to allow navigation/async operations to complete
-								setTimeout(() => {
-									console.log('🔥 Dismissing toast after action');
-									handleDismiss();
-								}, 100);
-							} catch (error) {
-								console.error('🔥 Error executing action:', error);
+							// Dismiss the toast after a short delay
+							setTimeout(() => {
+								console.log('Dismissing toast after action');
 								handleDismiss();
-							}
+							}, 150);
 						}}
+						activeOpacity={0.7}
 						hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
 					>
 						<Text style={[styles.actionText, config.customStyles?.actionText]}>

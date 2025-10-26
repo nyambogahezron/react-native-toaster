@@ -11,7 +11,7 @@
 		"lint": "turbo lint",
 		"lint:fix": "turbo lint:fix",
 		"check-types": "turbo check-types",
-		"clean": "turbo clean && rm -rf node_modules/.cache",
+		"clean": "turbo clean && rm -rf node_modules .cache .turbo",
 		"example": "turbo start --filter=example",
 		"example:android": "cd apps/example && bun run android",
 		"example:ios": "cd apps/example && bun run ios",
@@ -21,7 +21,8 @@
 		"package:test": "turbo test --filter=hn-react-native-toaster"
 	},
 	"devDependencies": {
-		"turbo": "^2.5.6"
+		"turbo": "^2.5.8",
+		"workspace-version-aligner": "^1.0.3"
 	},
 	"packageManager": "bun@1.2.19",
 	"workspaces": [

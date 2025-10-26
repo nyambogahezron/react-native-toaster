@@ -41,7 +41,7 @@ export interface Toast {
 	duration?: number;
 	action?: {
 		label: string;
-		onPress: () => void;
+		onPress: () => void | Promise<void>;
 	};
 	config?: ToastConfig;
 }
@@ -49,14 +49,17 @@ export interface Toast {
 interface ToastState {
 	toasts: Toast[];
 	globalConfig: ToastConfig;
+	actionHandlers: Map<string, () => void | Promise<void>>;
 	showToast: (toast: Omit<Toast, 'id'>) => void;
 	hideToast: (id: string) => void;
 	clearAllToasts: () => void;
 	setGlobalConfig: (config: Partial<ToastConfig>) => void;
+	executeAction: (id: string) => void;
 }
 
 export const useToastStore = create<ToastState>((set, get) => ({
 	toasts: [],
+	actionHandlers: new Map(),
 
 	globalConfig: {
 		position: 'top',
@@ -78,6 +81,14 @@ export const useToastStore = create<ToastState>((set, get) => ({
 
 	showToast: (toast) => {
 		const id = Math.random().toString(36).substr(2, 9);
+
+		// Store the action handler separately to maintain a stable reference
+		if (toast.action) {
+			const handlers = get().actionHandlers;
+			handlers.set(id, toast.action.onPress);
+			set({ actionHandlers: new Map(handlers) });
+		}
+
 		const newToast: Toast = {
 			id,
 			duration: 4000,
@@ -97,19 +108,42 @@ export const useToastStore = create<ToastState>((set, get) => ({
 	},
 
 	hideToast: (id) => {
+		// Clean up the action handler when toast is hidden
+		const handlers = get().actionHandlers;
+		handlers.delete(id);
+		set({ actionHandlers: new Map(handlers) });
+
 		set((state) => ({
 			toasts: state.toasts.filter((toast) => toast.id !== id),
 		}));
 	},
 
 	clearAllToasts: () => {
-		set({ toasts: [] });
+		// Clear all action handlers
+		set({ toasts: [], actionHandlers: new Map() });
 	},
 
 	setGlobalConfig: (config) => {
 		set((state) => ({
 			globalConfig: { ...state.globalConfig, ...config },
 		}));
+	},
+
+	executeAction: (id) => {
+		const handler = get().actionHandlers.get(id);
+		if (handler) {
+			try {
+				const result = handler();
+				// Handle async actions
+				if (result instanceof Promise) {
+					result.catch((error) => {
+						console.error('Error executing toast action:', error);
+					});
+				}
+			} catch (error) {
+				console.error('Error executing toast action:', error);
+			}
+		}
 	},
 }));
 

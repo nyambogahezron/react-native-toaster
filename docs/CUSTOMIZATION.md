@@ -284,53 +284,6 @@ const showLoadingToast = () => {
 };
 ```
 
-### Notification-Style Toast
-
-```tsx
-toast.custom({
-	type: 'info',
-	title: 'New Message',
-	message: 'You have received a new message from John',
-	duration: 8000,
-	config: {
-		position: 'top',
-		customStyles: {
-			container: {
-				backgroundColor: '#FFFFFF',
-				borderColor: '#E5E7EB',
-				borderWidth: 1,
-				borderLeftColor: '#3B82F6',
-				borderLeftWidth: 4,
-				borderRadius: 8,
-				shadowColor: '#000',
-				shadowOffset: { width: 0, height: 2 },
-				shadowOpacity: 0.1,
-				shadowRadius: 8,
-				elevation: 4,
-			},
-			title: {
-				color: '#111827',
-				fontSize: 16,
-				fontWeight: '600',
-			},
-			message: {
-				color: '#6B7280',
-				fontSize: 14,
-			},
-			icon: {
-				color: '#3B82F6',
-			},
-		},
-	},
-	action: {
-		label: 'View',
-		onPress: () => {
-			// Navigate to message
-		},
-	},
-});
-```
-
 ### Toast with Custom Position and Animation
 
 ```tsx

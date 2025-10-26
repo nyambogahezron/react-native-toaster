@@ -42,10 +42,6 @@ export const useToast = () => {
 			});
 		},
 
-		custom: (toast: Omit<Toast, 'id'>) => {
-			showToast(toast);
-		},
-
 		hide: hideToast,
 		clear: clearAllToasts,
 		configure: setGlobalConfig,

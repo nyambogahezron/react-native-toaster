@@ -1,67 +1,68 @@
 {
-	"name": "hn-react-native-toaster",
-	"version": "1.0.0-beta",
-	"description": "A beautiful, animated toast notification system for React Native",
-	"main": "./dist/index.js",
-	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
-	"react-native": "./dist/index.js",
-	"files": [
-		"dist/",
-		"README.md",
-		"CHANGELOG.md"
-	],
-	"scripts": {
-		"build": "bun run tsc",
-		"dev": "bun run tsc --watch",
-		"start": "bun run tsc --watch",
-		"test": "bun test",
-		"test:watch": "bun test --watch",
-		"lint": "bun run eslint . --ext .ts,.tsx",
-		"lint:fix": "bun run eslint . --ext .ts,.tsx --fix",
-		"check-types": "bun run tsc --noEmit",
-		"clean": "rm -rf dist"
-	},
-	"keywords": [
-		"react-native",
-		"toast",
-		"notification",
-		"animated",
-		"expo",
-		"zustand"
-	],
-	"author": "nyambogahezron",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/nyambogahezron/react-toaster.git"
-	},
-	"dependencies": {
-		"zustand": "^4.5.0"
-	},
-	"peerDependencies": {
-		"react": ">=17.0.0",
-		"react-native": ">=0.70.0",
-		"react-native-reanimated": ">=3.0.0",
-		"react-native-gesture-handler": ">=2.0.0",
-		"react-native-safe-area-context": ">=4.0.0",
-		"typescript": "^5"
-	},
-	"devDependencies": {
-		"@types/bun": "latest",
-		"@types/react": "^18.2.0",
-		"@types/react-native": "^0.72.0",
-		"@typescript-eslint/eslint-plugin": "^8.39.1",
-		"@typescript-eslint/parser": "^8.39.1",
-		"eslint": "^8.0.0",
-		"typescript": "^5.0.0"
-	},
-	"exports": {
-		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.js",
-			"require": "./dist/index.js",
-			"react-native": "./dist/index.js"
-		}
-	}
+  "name": "hn-react-native-toaster",
+  "version": "1.0.2",
+  "description": "A beautiful, animated toast notification system for React Native",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "react-native": "./dist/index.js",
+  "files": [
+    "dist/",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "scripts": {
+    "build": "bun run tsc",
+    "dev": "bun run tsc --watch",
+    "start": "bun run tsc --watch",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "lint": "bun run eslint . --ext .ts,.tsx",
+    "lint:fix": "bun run eslint . --ext .ts,.tsx --fix",
+    "check-types": "bun run tsc --noEmit",
+    "clean": "rm -rf dist node_modules .cache .turbo"
+  },
+  "keywords": [
+    "react-native",
+    "toast",
+    "notification",
+    "animated",
+    "expo",
+    "zustand"
+  ],
+  "author": "nyambogahezron",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nyambogahezron/react-toaster.git"
+  },
+  "dependencies": {
+    "zustand": "^4.5.0"
+  },
+  "peerDependencies": {
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-reanimated": "~4.1.1",
+    "react-native-gesture-handler": "~2.28.0",
+    "react-native-safe-area-context": "^5.6.1",
+    "typescript": "^5"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/react": "~19.1.0",
+    "@types/react-native": "^0.73.0",
+    "@typescript-eslint/eslint-plugin": "^8.39.1",
+    "@typescript-eslint/parser": "^8.39.1",
+    "eslint": "^9.25.0",
+    "typescript": "~5.9.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "react-native": "./dist/index.js"
+    }
+  }
 }

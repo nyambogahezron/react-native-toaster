@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-	View,
-	Text,
-	TouchableOpacity,
-	StyleSheet,
-	SafeAreaView,
-} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ToastContainer, useToast } from 'hn-react-native-toaster';
-import { router } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function ToastExample() {
 	const toast = useToast();
@@ -26,32 +20,6 @@ function ToastExample() {
 
 	const showInfoToast = () => {
 		toast.info('New features are available in this update.', 'Info');
-	};
-
-	const showCustomToast = () => {
-		console.log('🚀 showCustomToast called at:', new Date().toISOString());
-
-		const actionFunction = () => {
-			console.log('🎯 Action button pressed at:', new Date().toISOString());
-			alert('Action button was pressed!');
-			console.log('🎯 About to navigate to /details');
-			router.push('/details');
-			console.log('🎯 Navigation call completed');
-		};
-
-		console.log('🚀 Creating toast with action function');
-
-		toast.custom({
-			type: 'success',
-			message: 'Task completed with custom action!',
-			title: 'Custom Action',
-			action: {
-				label: 'View Details',
-				onPress: actionFunction,
-			},
-		});
-
-		console.log('🚀 Toast.custom() call completed');
 	};
 
 	return (
@@ -89,13 +57,6 @@ function ToastExample() {
 						onPress={showInfoToast}
 					>
 						<Text style={styles.buttonText}>Show Info Toast</Text>
-					</TouchableOpacity>
-
-					<TouchableOpacity
-						style={[styles.button, styles.customButton]}
-						onPress={showCustomToast}
-					>
-						<Text style={styles.buttonText}>Show Custom Action Toast</Text>
 					</TouchableOpacity>
 				</View>
 			</View>
@@ -169,8 +130,5 @@ const styles = StyleSheet.create({
 	},
 	infoButton: {
 		backgroundColor: '#3b82f6',
-	},
-	customButton: {
-		backgroundColor: '#8b5cf6',
 	},
 });

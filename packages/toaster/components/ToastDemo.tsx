@@ -102,26 +102,6 @@ const ToastDemo: React.FC = () => {
 		});
 	};
 
-	const showAsyncExample = async () => {
-		toast.info('Starting async operation...', 'Loading');
-
-		try {
-			await new Promise((resolve, reject) => {
-				setTimeout(() => {
-					if (Math.random() > 0.5) {
-						resolve('Success!');
-					} else {
-						reject(new Error('Network error occurred'));
-					}
-				}, 2000);
-			});
-
-			apiToast.handleApiSuccess('Data loaded successfully!');
-		} catch (error) {
-			apiToast.handleApiError(error);
-		}
-	};
-
 	const showFormValidationExample = () => {
 		if (!customMessage.trim()) {
 			formToast.validationError('Please enter a message');
@@ -130,21 +110,6 @@ const ToastDemo: React.FC = () => {
 
 		formToast.saveSuccess('Message saved successfully!');
 		setCustomMessage('');
-	};
-
-	const showCustomActionToast = () => {
-		toast.custom({
-			type: 'warning',
-			title: 'Unsaved Changes',
-			message: 'You have unsaved changes. Do you want to save them?',
-			duration: 0,
-			action: {
-				label: 'Save Now',
-				onPress: () => {
-					toast.success('Changes saved!');
-				},
-			},
-		});
 	};
 
 	const showStackedToasts = () => {
@@ -164,7 +129,6 @@ const ToastDemo: React.FC = () => {
 	return (
 		<ScrollView style={styles.container}>
 			<Text style={styles.title}>Advanced Toast Examples</Text>
-
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Basic Toasts</Text>
 				<View style={styles.buttonRow}>
@@ -199,23 +163,8 @@ const ToastDemo: React.FC = () => {
 					</TouchableOpacity>
 				</View>
 			</View>
-
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Advanced Features</Text>
-
-				<TouchableOpacity
-					style={[styles.button, styles.primaryButton]}
-					onPress={showAsyncExample}
-				>
-					<Text style={styles.buttonText}>Async Operation Example</Text>
-				</TouchableOpacity>
-
-				<TouchableOpacity
-					style={[styles.button, styles.primaryButton]}
-					onPress={showCustomActionToast}
-				>
-					<Text style={styles.buttonText}>Toast with Action Button</Text>
-				</TouchableOpacity>
 
 				<TouchableOpacity
 					style={[styles.button, styles.primaryButton]}
@@ -230,8 +179,7 @@ const ToastDemo: React.FC = () => {
 				>
 					<Text style={styles.buttonText}>Long Message Test</Text>
 				</TouchableOpacity>
-			</View>
-
+			</View>{' '}
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Custom Styling & Animation</Text>
 
@@ -270,7 +218,6 @@ const ToastDemo: React.FC = () => {
 					<Text style={styles.buttonText}>Configure Global Settings</Text>
 				</TouchableOpacity>
 			</View>
-
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Form Integration</Text>
 
@@ -289,7 +236,6 @@ const ToastDemo: React.FC = () => {
 					<Text style={styles.buttonText}>Validate & Save</Text>
 				</TouchableOpacity>
 			</View>
-
 			<View style={styles.section}>
 				<Text style={styles.sectionTitle}>Controls</Text>
 

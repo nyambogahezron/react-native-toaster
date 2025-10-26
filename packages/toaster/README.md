@@ -114,17 +114,6 @@ toast.error('Message', 'Title');
 toast.warning('Message', 'Title');
 toast.info('Message', 'Title');
 
-// Custom toast
-toast.custom({
-	type: 'success',
-	message: 'Custom message',
-	title: 'Custom title',
-	action: {
-		label: 'Action',
-		onPress: () => console.log('Action pressed'),
-	},
-});
-
 // Hide specific toast
 toast.hide('toast-id');
 
@@ -279,22 +268,6 @@ toast.info('Slow animation toast', 'Watch me!', {
 ```tsx
 toast.warning('I appear in the center!', 'Centered', {
 	position: 'center',
-});
-```
-
-### Toast with Action Button
-
-```tsx
-toast.custom({
-	type: 'success',
-	message: 'Task completed!',
-	title: 'Success',
-	action: {
-		label: 'View Details',
-		onPress: () => {
-			// Handle action
-		},
-	},
 });
 ```
 

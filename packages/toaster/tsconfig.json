@@ -16,8 +16,15 @@
 		"declaration": true,
 		"outDir": "./dist",
 		"jsx": "react-native",
-		"verbatimModuleSyntax": false
+		"verbatimModuleSyntax": false,
+		"skipDefaultLibCheck": true,
+		"noImplicitAny": false
 	},
-	"include": ["index.ts", "components/**/*", "hooks/**/*", "store/**/*"],
+	"include": [
+		"index.ts",
+		"components/**/*",
+		"hooks/**/*",
+		"store/**/*",
+	],
 	"exclude": ["node_modules", "dist", "example"]
 }
